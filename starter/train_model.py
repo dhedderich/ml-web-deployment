@@ -1,11 +1,13 @@
 # Script to train machine learning model.
 
 from sklearn.model_selection import train_test_split, cross_val_score, KFold
-from sklearn.ensemble import RandomForestClassifier
+
 import pandas as pd
 import os
-import joblib
+import numpy as np
+
 from ml.data import process_data
+from ml.model import train_model, save_model, load_model, inference, compute_model_metrics
 
 # Add code to load in the data.
 
@@ -31,19 +33,49 @@ X_train, y_train, encoder, lb = process_data(
 # Proces the test data with the process_data function.
 
 X_test, y_test, encoder, lb = process_data(
-    test, categorical_features=cat_features, label="salary", training=True
+    test, categorical_features=cat_features, label="salary", training=False, encoder = encoder, lb = lb
 )
 
 # TESTS
+print('Shape Tests:')
 print(X_train.shape)
 print(y_train.shape)
+print(X_test.shape)
+print(y_test.shape)
 
-# Train a model and save
+# Train a model
+model = train_model(X_train, y_train)
 
-rf = RandomForestClassifier()
-model = rf.fit(X_train, y_train)
+# Specify save folder
+script_dir = os.path.dirname(os.path.abspath(__file__))
 
-folder_path = os.path.join(os.path.dirname(__file__), "../model")
+# Navigate up one directory to the project directory
+project_dir = os.path.abspath(os.path.join(script_dir, '../'))
 
-joblib.dump(model, f'{folder_path}/rf_model.pkl')
+# Specify target folder
+target_folder = os.path.join(project_dir, 'model')
+
+# Create the directory if it not exists
+os.makedirs(target_folder, exist_ok=True)
+
+# Save model in target folder
+save_model(model, target_folder)
+
+# Specify load folder and load model
+load_folder = target_folder
+model = load_model(load_folder)
+
+# Run inference
+pred = inference(model, X_test)
+
+# Calculate and print metrics
+precision, recall, fbeta = compute_model_metrics(y_test, pred)
+print('Precision: ' + str(np.round(precision, 2)) + ' Recall: ' + str(np.round(recall, 2)) + ' fbeta: ' + str(np.round(fbeta,2)))
+
+
+
+
+
+
+
 

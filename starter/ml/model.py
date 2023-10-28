@@ -1,10 +1,11 @@
 from sklearn.metrics import fbeta_score, precision_score, recall_score
-
+from sklearn.ensemble import RandomForestClassifier
+import joblib, os
 
 # Optional: implement hyperparameter tuning.
 def train_model(X_train, y_train):
     """
-    Trains a machine learning model and returns it.
+    Trains a random forest machine learning model and returns it.
 
     Inputs
     ------
@@ -17,8 +18,35 @@ def train_model(X_train, y_train):
     model
         Trained machine learning model.
     """
+    # Create model
+    rf = RandomForestClassifier()
+    
+    # Train model
+    model = rf.fit(X_train, y_train)
+    return model
 
-    pass
+def save_model(model, path: str):
+    """Saves a machine learning model at a specified location
+
+    Args:
+        model : machine learning model to save
+        path (str): optional path to save the model
+    """
+    # Save the model
+    joblib.dump(model, os.path.join(path, 'model.pkl'))
+
+def load_model(path: str = 'model'):
+    """Loads a machine learning model at a specified location
+
+    Args:
+        path (str): optional path to load the model
+    Returns:
+        model: Trained machine learning model
+    """
+    # load the model
+    model = joblib.load(os.path.join(path, 'model.pkl'))
+
+    return model
 
 
 def compute_model_metrics(y, preds):
@@ -37,6 +65,7 @@ def compute_model_metrics(y, preds):
     recall : float
     fbeta : float
     """
+    # Calculate metrics
     fbeta = fbeta_score(y, preds, beta=1, zero_division=1)
     precision = precision_score(y, preds, zero_division=1)
     recall = recall_score(y, preds, zero_division=1)
@@ -57,4 +86,7 @@ def inference(model, X):
     preds : np.array
         Predictions from the model.
     """
-    pass
+    # Run inference
+    pred = model.predict(X)
+    return pred
+    

@@ -7,7 +7,7 @@ import os
 import numpy as np
 
 from ml.data import process_data
-from ml.model import train_model, save_model, load_model, inference, compute_model_metrics
+from ml.model import train_model, save_model, load_model, inference, compute_model_metrics, calculate_slice_metrics
 
 # Add code to load in the data.
 
@@ -72,10 +72,11 @@ pred = inference(model, X_test)
 precision, recall, fbeta = compute_model_metrics(y_test, pred)
 print('Precision: ' + str(np.round(precision, 2)) + ' Recall: ' + str(np.round(recall, 2)) + ' fbeta: ' + str(np.round(fbeta,2)))
 
+# Prepare categorical columns for slice metric results
+test['label'] = lb.transform(test['salary'])
+test['pred'] = pred
 
-
-
-
-
-
-
+# Calculate and print data slice metrics
+slice_results = calculate_slice_metrics(test, test['label'], test['pred'], ['education'])
+with open('slice_output.txt', 'w') as file:
+    file.write(str(slice_results))

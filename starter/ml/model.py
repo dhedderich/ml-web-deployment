@@ -1,6 +1,7 @@
 from sklearn.metrics import fbeta_score, precision_score, recall_score
 from sklearn.ensemble import RandomForestClassifier
 import joblib, os
+import pandas as pd
 
 # Optional: implement hyperparameter tuning.
 def train_model(X_train, y_train):
@@ -89,4 +90,45 @@ def inference(model, X):
     # Run inference
     pred = model.predict(X)
     return pred
+
+import pandas as pd
+from sklearn.metrics import precision_score, recall_score, fbeta_score
+
+def calculate_slice_metrics(X_test, y_test, pred, column_names):
+    # Ensure X_test, y_test, and pred are pandas dataframes to handle them
+    X_test = pd.DataFrame(X_test)
+    y_test = pd.DataFrame(y_test)
+    pred = pd.DataFrame(pred)
     
+    # Transform object types to category types for better manipulation
+    object_columns = X_test.select_dtypes(include='object')
+    X_test[object_columns.columns] = object_columns.astype('category')
+    
+    # Use column_names to calculate its metrics
+    categorical_columns = X_test[column_names]
+    
+    # Initialize a dictionary to store results
+    result_dict = {}
+
+    # Iterate over categorical columns
+    for column in categorical_columns:
+        unique_classes = X_test[column].cat.categories
+        for unique_class in unique_classes:
+            # Filter rows based on the unique class
+            y_true = y_test[y_test.index.isin(X_test[X_test[column] == unique_class].index)]
+            y_pred = pred[pred.index.isin(y_true.index)]
+
+            # Calculate metrics
+            precision = precision_score(y_true, y_pred, average='weighted')
+            recall = recall_score(y_true, y_pred, average='weighted')
+            fbeta = fbeta_score(y_true, y_pred, beta=1, average='weighted')
+
+            # Store the results in the dictionary
+            if column not in result_dict:
+                result_dict[column] = {}
+            result_dict[column][unique_class] = {
+                'precision': precision,
+                'recall': recall,
+                'fbeta': fbeta
+            }
+    return result_dict

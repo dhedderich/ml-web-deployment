@@ -31,7 +31,6 @@ feature_list = [
 
 data = data[feature_list]
 
-# Optional enhancement, use K-fold cross validation instead of a train-test split.
 train, test = train_test_split(data, test_size=0.2)
 
 cat_features = [

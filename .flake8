@@ -1,5 +1,5 @@
 [flake8]
 exclude = 
 venv/ 
-sanitycheck.py
-starter/ml/data.py
+./sanitycheck.py
+./starter/ml/data.py

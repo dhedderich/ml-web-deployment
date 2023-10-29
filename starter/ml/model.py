@@ -57,7 +57,7 @@ def load_model(path: str):
 
 def compute_model_metrics(y, preds):
     """
-    Validates the trained machine learning 
+    Validates the trained machine learning
     model using precision, recall, and F1.
 
     Inputs

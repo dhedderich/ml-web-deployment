@@ -123,8 +123,7 @@ class PredictionResponse(BaseModel):
 
 def test_POST_inference_endpoint_successful():
     # Define test input data
-    input_data = {
-        "inference": {
+    input_data = {        
             "workclass": "Private",
             "education": "HS-grad",
             "marital_status": "Divorced",
@@ -132,16 +131,12 @@ def test_POST_inference_endpoint_successful():
             "relationship": "Not-in-family",
             "race": "White",
             "sex": "Male",
-            "native_country": "United-States",
-        },
-        "response_model": {
-            "prediction": 0
-        }
+            "native_country": "United-States",        
     }
 
     # Send a POST request to the "/inference" endpoint with the test input data
     response = client.post("/inference/", json=input_data)
-    print(response.text)
+    
     # Assert that the response status code is 200
     assert response.status_code == 200
 
@@ -153,8 +148,7 @@ def test_POST_inference_endpoint_successful():
 
 def test_POST_inference_endpoint_error_handling():
     # Define test input data with incorrect values
-    input_data = {
-        "inference": {
+    input_data = {        
             "workclass": "Private",
             "education": "HS-grad",
             "marital_status": "Divorced",
@@ -163,10 +157,6 @@ def test_POST_inference_endpoint_error_handling():
             "race": "White",
             "sex": "Other-Gender",
             "native_country": "United-States",
-        },
-        "response_model": {
-            "prediction": 0
-        }
     }
 
     # Send a POST request to the "/inference" endpoint with test input data

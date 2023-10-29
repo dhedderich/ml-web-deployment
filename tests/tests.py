@@ -2,8 +2,13 @@ import numpy as np
 import pytest
 import joblib
 import os
+from pydantic import BaseModel
+import numpy as np
+from fastapi.testclient import TestClient
 from sklearn.ensemble import RandomForestClassifier
 from starter.ml.model import train_model, load_model, save_model
+from main import app
+
 
 def test_train_model_return_type():
     # Generate some sample training data
@@ -73,3 +78,86 @@ def test_load_model_return_type(tmpdir):
 
     # Check if the loaded model is an instance of the expected type
     assert isinstance(loaded_model, type(model))
+
+# FastAPI Tests
+
+client = TestClient(app)
+
+def test_get_endpoint():
+    # Send a GET request to the "/welcome" endpoint
+    response = client.get("/")
+
+    # Check that the response status code is 200
+    assert response.status_code == 200
+
+    # Assert that the response contains the expected message
+    expected_message = {"Welcome": "Welcome to one of the finest classifiers available"}
+    assert response.json() == expected_message
+
+# Declare the post object
+class RequestItem(BaseModel):
+    # Define the structure of the input data for testing
+    workclass: str
+    education: str
+    marital_status: str
+    occupation: str
+    relationship: str
+    race: str
+    sex: str
+    native_country: str
+
+# Declare the response object   
+class PredictionResponse(BaseModel):
+    prediction: float
+
+def test_inference_endpoint_successful():
+    # Define test input data
+    input_data = {
+        "inference": {
+            "workclass": "Private",
+            "education": "HS-grad",
+            "marital_status": "Divorced",
+            "occupation": "Handlers-cleaners",
+            "relationship": "Not-in-family",
+            "race": "White",
+            "sex": "Male",
+            "native_country": "United-States",
+        },
+        "response_model": {
+            "prediction": 0
+    }
+}
+
+    # Send a POST request to the "/inference" endpoint with the test input data
+    response = client.post("/inference/", json=input_data)
+    print(response.text)
+    # Assert that the response status code is 200
+    assert response.status_code == 200
+
+    # Assert that the response contains a "prediction" key
+    response_data = response.json()
+    assert "prediction" in response_data
+
+def test_inference_endpoint_error_handling():
+    # Define test input data with incorrect values
+    input_data = {
+        "inference": {
+            "workclass": "Private",
+            "education": "HS-grad",
+            "marital_status": "Divorced",
+            "occupation": "Handlers-cleaners",
+            "relationship": "Not-in-family",
+            "race": "White",
+            "sex": "Other-Gender",
+            "native_country": "United-States",
+        },
+        "response_model": {
+            "prediction": 0
+    }
+}
+
+    # Send a POST request to the "/inference" endpoint with the test input data
+    response = client.post("/inference/", json=input_data)
+
+    # Assert that the response status code is 500 (Internal Server Error) due to error handling
+    assert response.status_code == 500

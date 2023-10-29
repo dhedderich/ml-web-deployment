@@ -3,7 +3,6 @@ import pytest
 import joblib
 import os
 from pydantic import BaseModel
-import numpy as np
 from fastapi.testclient import TestClient
 from sklearn.ensemble import RandomForestClassifier
 from starter.ml.model import train_model, load_model, save_model
@@ -21,6 +20,7 @@ def test_train_model_return_type():
     # Check if the returned model is an instance of RandomForestClassifier
     assert isinstance(model, RandomForestClassifier)
 
+
 def test_save_model_return_type(tmpdir):
     # Load model
     script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -33,14 +33,14 @@ def test_save_model_return_type(tmpdir):
 
     # load the model
     model = joblib.load(os.path.join(load_folder, 'model.pkl'))
-    
+
     # Specify a temporary directory for testing
     test_folder = tmpdir.mkdir("test_data")
     test_folder = test_folder.mkdir('model')
     model_path = str(test_folder)
-    
+
     # Call the save_model function
-    #model_path = str(test_folder.join("model.pkl"))
+    # model_path = str(test_folder.join("model.pkl"))
     save_model(model, model_path)
 
     # Check if the model file was saved
@@ -50,8 +50,10 @@ def test_save_model_return_type(tmpdir):
     loaded_model = joblib.load(f'{model_path}/model.pkl')
 
     # Check if the loaded model is equal to the original model
-    assert isinstance(loaded_model, RandomForestClassifier) == isinstance(model, RandomForestClassifier)
-    
+    assert isinstance(loaded_model, RandomForestClassifier) == isinstance(
+        model, RandomForestClassifier)
+
+
 def test_load_model_return_type(tmpdir):
     # Load model
     script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -64,12 +66,12 @@ def test_load_model_return_type(tmpdir):
 
     # load the model
     model = joblib.load(os.path.join(load_folder, 'model.pkl'))
-    
+
     # Specify a temporary directory for testing
     test_folder = tmpdir.mkdir('test_data')
     test_folder = test_folder.mkdir('model')
     model_path = str(test_folder)
-  
+
     # Save the model
     joblib.dump(model, os.path.join(model_path, 'model.pkl'))
 
@@ -81,9 +83,11 @@ def test_load_model_return_type(tmpdir):
 
 # FastAPI Tests
 
+
 client = TestClient(app)
 
-def test_get_endpoint():
+
+def test_GET_endpoint():
     # Send a GET request to the "/welcome" endpoint
     response = client.get("/")
 
@@ -91,10 +95,13 @@ def test_get_endpoint():
     assert response.status_code == 200
 
     # Assert that the response contains the expected message
-    expected_message = {"Welcome": "Welcome to one of the finest classifiers available"}
+    expected_message = {
+        "Welcome": "Welcome to one of the finest classifiers available"}
     assert response.json() == expected_message
 
 # Declare the post object
+
+
 class RequestItem(BaseModel):
     # Define the structure of the input data for testing
     workclass: str
@@ -106,11 +113,14 @@ class RequestItem(BaseModel):
     sex: str
     native_country: str
 
-# Declare the response object   
+# Declare the response object
+
+
 class PredictionResponse(BaseModel):
     prediction: float
 
-def test_inference_endpoint_successful():
+
+def test_POST_inference_endpoint_successful():
     # Define test input data
     input_data = {
         "inference": {
@@ -125,8 +135,8 @@ def test_inference_endpoint_successful():
         },
         "response_model": {
             "prediction": 0
+        }
     }
-}
 
     # Send a POST request to the "/inference" endpoint with the test input data
     response = client.post("/inference/", json=input_data)
@@ -139,7 +149,8 @@ def test_inference_endpoint_successful():
     assert "prediction" in response_data
     assert 0 == response_data["prediction"]
 
-def test_inference_endpoint_error_handling():
+
+def test_POST_inference_endpoint_error_handling():
     # Define test input data with incorrect values
     input_data = {
         "inference": {
@@ -154,8 +165,8 @@ def test_inference_endpoint_error_handling():
         },
         "response_model": {
             "prediction": 0
+        }
     }
-}
 
     # Send a POST request to the "/inference" endpoint with the test input data
     response = client.post("/inference/", json=input_data)

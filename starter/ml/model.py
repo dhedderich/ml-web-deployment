@@ -1,9 +1,13 @@
+from sklearn.metrics import precision_score, recall_score, fbeta_score
 from sklearn.metrics import fbeta_score, precision_score, recall_score
 from sklearn.ensemble import RandomForestClassifier
-import joblib, os
+import joblib
+import os
 import pandas as pd
 
 # Optional: implement hyperparameter tuning.
+
+
 def train_model(X_train, y_train):
     """
     Trains a random forest machine learning model and returns it.
@@ -21,10 +25,11 @@ def train_model(X_train, y_train):
     """
     # Create model
     rf = RandomForestClassifier()
-    
+
     # Train model
     model = rf.fit(X_train, y_train)
     return model
+
 
 def save_model(model, path: str):
     """Saves a machine learning model at a specified location
@@ -35,6 +40,7 @@ def save_model(model, path: str):
     """
     # Save the model
     joblib.dump(model, os.path.join(path, 'model.pkl'))
+
 
 def load_model(path: str):
     """Loads a machine learning model at a specified location
@@ -91,22 +97,20 @@ def inference(model, X):
     pred = model.predict(X)
     return pred
 
-import pandas as pd
-from sklearn.metrics import precision_score, recall_score, fbeta_score
 
 def calculate_slice_metrics(X_test, y_test, pred, column_names):
     # Ensure X_test, y_test, and pred are pandas dataframes to handle them
     X_test = pd.DataFrame(X_test)
     y_test = pd.DataFrame(y_test)
     pred = pd.DataFrame(pred)
-    
+
     # Transform object types to category types for better manipulation
     object_columns = X_test.select_dtypes(include='object')
     X_test[object_columns.columns] = object_columns.astype('category')
-    
+
     # Use column_names to calculate its metrics
     categorical_columns = X_test[column_names]
-    
+
     # Initialize a dictionary to store results
     result_dict = {}
 
@@ -115,7 +119,8 @@ def calculate_slice_metrics(X_test, y_test, pred, column_names):
         unique_classes = X_test[column].cat.categories
         for unique_class in unique_classes:
             # Filter rows based on the unique class
-            y_true = y_test[y_test.index.isin(X_test[X_test[column] == unique_class].index)]
+            y_true = y_test[y_test.index.isin(
+                X_test[X_test[column] == unique_class].index)]
             y_pred = pred[pred.index.isin(y_true.index)]
 
             # Calculate metrics

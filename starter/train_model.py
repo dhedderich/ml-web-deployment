@@ -1,6 +1,6 @@
 # Script to train machine learning model.
 
-from sklearn.model_selection import train_test_split, cross_val_score, KFold
+from sklearn.model_selection import train_test_split
 
 import pandas as pd
 import os
@@ -12,7 +12,8 @@ from ml.model import train_model, save_model, load_model, inference, compute_mod
 
 # Add code to load in the data.
 
-data = pd.read_csv(os.path.join(os.path.dirname(__file__), "../data/census.csv"))
+data = pd.read_csv(os.path.join(
+    os.path.dirname(__file__), "../data/census.csv"))
 
 # Select interesting features
 feature_list = [
@@ -66,7 +67,7 @@ joblib.dump(lb, os.path.join(target_folder, 'lb.pkl'))
 # Proces the test data with the process_data function.
 
 X_test, y_test, encoder, lb = process_data(
-    test, categorical_features=cat_features, label="salary", training=False, encoder = encoder, lb = lb
+    test, categorical_features=cat_features, label="salary", training=False, encoder=encoder, lb=lb
 )
 
 # TESTS
@@ -91,13 +92,15 @@ pred = inference(model, X_test)
 
 # Calculate and print metrics
 precision, recall, fbeta = compute_model_metrics(y_test, pred)
-print('Precision: ' + str(np.round(precision, 2)) + ' Recall: ' + str(np.round(recall, 2)) + ' fbeta: ' + str(np.round(fbeta,2)))
+print('Precision: ' + str(np.round(precision, 2)) + ' Recall: ' +
+      str(np.round(recall, 2)) + ' fbeta: ' + str(np.round(fbeta, 2)))
 
 # Prepare categorical columns for slice metric results
 test['label'] = lb.transform(test['salary'])
 test['pred'] = pred
 
 # Calculate and print data slice metrics
-slice_results = calculate_slice_metrics(test, test['label'], test['pred'], ['education'])
+slice_results = calculate_slice_metrics(
+    test, test['label'], test['pred'], ['education'])
 with open('slice_output.txt', 'w') as file:
     file.write(str(slice_results))

@@ -5,6 +5,7 @@ from main import app
 
 client = TestClient(app)
 
+
 def test_post():
     data = json.dumps({"value": 10})
     r = client.post("/42?query=5", data=data)
@@ -12,5 +13,6 @@ def test_post():
     assert r.json()["path"] == 42
     assert r.json()["query"] == 5
     assert r.json()["body"] == {"value": 10}
-    
+
+
 test_post()

@@ -36,7 +36,7 @@ def save_model(model, path: str):
     # Save the model
     joblib.dump(model, os.path.join(path, 'model.pkl'))
 
-def load_model(path: str = 'model'):
+def load_model(path: str):
     """Loads a machine learning model at a specified location
 
     Args:

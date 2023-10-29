@@ -62,7 +62,7 @@ async def welcome():
 # POST request for inference
 
 
-@app.post("/inference/", response_model = PredictionResponse)
+@app.post("/inference/", response_model=PredictionResponse)
 async def inference(inference: RequestItem):
     try:
         df_request = pd.DataFrame([inference.dict()])

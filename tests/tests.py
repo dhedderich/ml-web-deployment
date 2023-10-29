@@ -133,9 +133,6 @@ def test_POST_inference_endpoint_successful():
             "race": "White",
             "sex": "Male",
             "native_country": "United-States",
-        },
-        "response_model": {
-            "prediction": 0
         }
     }
 
@@ -163,9 +160,6 @@ def test_POST_inference_endpoint_error_handling():
             "race": "White",
             "sex": "Other-Gender",
             "native_country": "United-States",
-        },
-        "response_model": {
-            "prediction": 0
         }
     }
 

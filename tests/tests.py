@@ -137,6 +137,7 @@ def test_inference_endpoint_successful():
     # Assert that the response contains a "prediction" key
     response_data = response.json()
     assert "prediction" in response_data
+    assert 0 == response_data["prediction"]
 
 def test_inference_endpoint_error_handling():
     # Define test input data with incorrect values

@@ -8,7 +8,8 @@ import numpy as np
 import joblib
 
 from ml.data import process_data
-from ml.model import train_model, save_model, load_model, inference, compute_model_metrics, calculate_slice_metrics
+from ml.model import train_model, save_model, load_model
+from ml.model import inference, compute_model_metrics, calculate_slice_metrics
 
 # Add code to load in the data.
 
@@ -45,7 +46,8 @@ cat_features = [
 ]
 
 X_train, y_train, encoder, lb = process_data(
-    train, categorical_features=cat_features, label="salary", training=True
+    train, categorical_features=cat_features,
+    label="salary", training=True
 )
 
 # Specify save folder
@@ -67,7 +69,8 @@ joblib.dump(lb, os.path.join(target_folder, 'lb.pkl'))
 # Proces the test data with the process_data function.
 
 X_test, y_test, encoder, lb = process_data(
-    test, categorical_features=cat_features, label="salary", training=False, encoder=encoder, lb=lb
+    test, categorical_features=cat_features, label="salary",
+    training=False, encoder=encoder, lb=lb
 )
 
 # TESTS

@@ -168,8 +168,8 @@ def test_POST_inference_endpoint_error_handling():
         }
     }
 
-    # Send a POST request to the "/inference" endpoint with the test input data
+    # Send a POST request to the "/inference" endpoint with test input data
     response = client.post("/inference/", json=input_data)
 
-    # Assert that the response status code is 500 (Internal Server Error) due to error handling
+    # Assert that the response status code is 500 
     assert response.status_code == 500

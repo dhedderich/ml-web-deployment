@@ -31,7 +31,7 @@ feature_list = [
 
 data = data[feature_list]
 
-train, test = train_test_split(data, test_size=0.2)
+train, test = train_test_split(data, test_size=0.1)
 
 cat_features = [
     "workclass",

@@ -5,7 +5,6 @@ import os
 import pandas as pd
 
 
-
 def train_model(X_train, y_train):
     """
     Trains a random forest machine learning model and returns it.
@@ -92,7 +91,8 @@ def calculate_slice_metrics(X_test, y_test, pred, column_names):
         pred : Prediction of the model for the respective data
         column_names : Columns to compute the metrics for
     Returns:
-        result_dict : Dictionary with all metrics for each unique class per column
+        result_dict : Dictionary with all metrics for
+        each unique class per column
     """
     # Ensure X_test, y_test, and pred are pandas dataframes to handle them
     X_test = pd.DataFrame(X_test)

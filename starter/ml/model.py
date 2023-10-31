@@ -4,23 +4,17 @@ import joblib
 import os
 import pandas as pd
 
-# Optional: implement hyperparameter tuning.
 
 
 def train_model(X_train, y_train):
     """
     Trains a random forest machine learning model and returns it.
 
-    Inputs
-    ------
-    X_train : np.array
-        Training data.
-    y_train : np.array
-        Labels.
-    Returns
-    -------
-    model
-        Trained machine learning model.
+    Args:
+        X_train : Training data
+        y_train : Labels of training data
+    Returns:
+        model : Trained machine learning model.
     """
     # Create model
     rf = RandomForestClassifier()
@@ -47,7 +41,7 @@ def load_model(path: str):
     Args:
         path (str): optional path to load the model
     Returns:
-        model: Trained machine learning model
+        model : Trained machine learning model
     """
     # load the model
     model = joblib.load(os.path.join(path, 'model.pkl'))
@@ -58,19 +52,15 @@ def load_model(path: str):
 def compute_model_metrics(y, preds):
     """
     Validates the trained machine learning
-    model using precision, recall, and F1.
+    model using precision, recall and fbeta.
 
-    Inputs
-    ------
-    y : np.array
-        Known labels, binarized.
-    preds : np.array
-        Predicted labels, binarized.
-    Returns
-    -------
-    precision : float
-    recall : float
-    fbeta : float
+    Args:
+        y : Known labels
+        preds : Predicted labels
+    Returns:
+        precision : precision metric result
+        recall : recall metric result
+        fbeta : fbeta metric result
     """
     # Calculate metrics
     fbeta = fbeta_score(y, preds, beta=1, zero_division=1)
@@ -82,16 +72,11 @@ def compute_model_metrics(y, preds):
 def inference(model, X):
     """ Run model inferences and return the predictions.
 
-    Inputs
-    ------
-    model : ???
-        Trained machine learning model.
-    X : np.array
-        Data used for prediction.
-    Returns
-    -------
-    preds : np.array
-        Predictions from the model.
+    Args:
+        model : Trained machine learning model
+        X : Input data used for prediction.
+    Returns:
+        preds : Inference from the model
     """
     # Run inference
     pred = model.predict(X)
@@ -99,6 +84,16 @@ def inference(model, X):
 
 
 def calculate_slice_metrics(X_test, y_test, pred, column_names):
+    """ Calculate precision, recall and fbeta for slices of all inputed columns
+
+    Args:
+        X_test : Input dataframe with all columns
+        y_test : Label of the input dataframe
+        pred : Prediction of the model for the respective data
+        column_names : Columns to compute the metrics for
+    Returns:
+        result_dict : Dictionary with all metrics for each unique class per column
+    """
     # Ensure X_test, y_test, and pred are pandas dataframes to handle them
     X_test = pd.DataFrame(X_test)
     y_test = pd.DataFrame(y_test)

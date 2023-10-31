@@ -41,7 +41,6 @@ def test_save_model_return_type(tmpdir):
     model_path = str(test_folder)
 
     # Call the save_model function
-    # model_path = str(test_folder.join("model.pkl"))
     save_model(model, model_path)
 
     # Check if the model file was saved

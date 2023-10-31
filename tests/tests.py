@@ -131,7 +131,7 @@ def test_POST_inference_endpoint_successful():
             "relationship": "Not-in-family",
             "race": "White",
             "sex": "Male",
-            "native_country": "United-States",        
+            "native_country": "United-States" #Removed ,       
     }
 
     # Send a POST request to the "/inference" endpoint with the test input data
@@ -156,7 +156,7 @@ def test_POST_inference_endpoint_error_handling():
             "relationship": "Not-in-family",
             "race": "White",
             "sex": "Other-Gender",
-            "native_country": "United-States",
+            "native_country": "United-States" #Removed , 
     }
 
     # Send a POST request to the "/inference" endpoint with test input data

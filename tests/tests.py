@@ -135,11 +135,11 @@ def test_POST_inference_endpoint_successful():
     
     # Define test input data for a 1 response
     input_data_1 = {        
-            "workclass": "Private",
+            "workclass": "Self-emp-not-inc",
             "education": "Masters",
-            "marital_status": "Never-married",
-            "occupation": "Prof-specialty",
-            "relationship": "Not-in-family",
+            "marital_status": "Divorced",
+            "occupation": "Exec-managerial",
+            "relationship": "Unmarried",
             "race": "White",
             "sex": "Female",
             "native_country": "United-States" #Removed ,       

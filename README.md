@@ -78,12 +78,15 @@ This endpoint loads the trained model and provides predictions. To receive a Cod
   "sex": "Male",
   "native_country": "United-States"
 }
+```
 
 The prediction is given back to the requestor in the following format:
 ```json
 {
    "prediction": 0.0
 }
+```
+You can call a currently running endpoint on Render with the code in the `call_endpoint.py` file
 
 ## Contributing
 Feel free to contribute to this project. You can fork the repository, make your changes, and create a pull request. Please ensure your code follows the established style guide.

@@ -121,8 +121,8 @@ class PredictionResponse(BaseModel):
 
 
 def test_POST_inference_endpoint_successful():
-    # Define test input data
-    input_data = {        
+    # Define test input data for a 0 response
+    input_data_0 = {        
             "workclass": "Private",
             "education": "HS-grad",
             "marital_status": "Divorced",
@@ -132,17 +132,37 @@ def test_POST_inference_endpoint_successful():
             "sex": "Male",
             "native_country": "United-States" #Removed ,       
     }
-
-    # Send a POST request to the "/inference" endpoint with the test input data
-    response = client.post("/inference/", json=input_data)
+    
+    # Define test input data for a 1 response
+    input_data_1 = {        
+            "workclass": "Private",
+            "education": "Masters",
+            "marital_status": "Never-married",
+            "occupation": "Prof-specialty",
+            "relationship": "Not-in-family",
+            "race": "White",
+            "sex": "Female",
+            "native_country": "United-States" #Removed ,       
+    }
+    
+    # Send a POST request to the "/inference" endpoint with the "0" test input data
+    response_0 = client.post("/inference/", json=input_data_0)
+    
+    # Send a POST request to the "/inference" endpoint with the "1" test input data
+    response_1 = client.post("/inference/", json=input_data_1)
     
     # Assert that the response status code is 200
-    assert response.status_code == 200
+    assert response_0.status_code == 200
 
-    # Assert that the response contains a "prediction" key
-    response_data = response.json()
+    # Assert that the response contains a "prediction" key and 0 answer
+    response_data = response_0.json()
     assert "prediction" in response_data
     assert 0 == response_data["prediction"]
+    
+    # Assert that the response contains a "prediction" key and 1 answer
+    response_data = response_1.json()
+    assert "prediction" in response_data
+    assert 1 == response_data["prediction"]
 
 
 def test_POST_inference_endpoint_error_handling():

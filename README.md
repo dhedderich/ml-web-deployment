@@ -21,7 +21,7 @@ The repository is structured as follows:
 - `train_model.py`: Python script to create and train the Random Forest model.
 - `requirements.txt`: List of required Python libraries.
 - `.github/workflows/`: GitHub Actions workflows for linting (flake8), unit testing (pytest), and installing requirements.
-- `main.p`: FastAPI definition for POST (inference) and GET method
+- `main.py`: FastAPI definition for POST (inference) and GET method
 
 ## Getting Started
 ### Prerequisites

@@ -120,7 +120,7 @@ class PredictionResponse(BaseModel):
     prediction: float
 
 
-def test_POST_inference_endpoint_successful():
+def test_POST_inference_0_endpoint_successful():
     # Define test input data for a 0 response
     input_data_0 = {        
             "workclass": "Private",
@@ -133,6 +133,18 @@ def test_POST_inference_endpoint_successful():
             "native_country": "United-States" #Removed ,       
     }
     
+    # Send a POST request to the "/inference" endpoint with the "0" test input data
+    response_0 = client.post("/inference/", json=input_data_0)
+    
+    # Assert that the response status code is 200
+    assert response_0.status_code == 200
+    
+    # Assert that the response contains a "prediction" key and 0 answer
+    response_data = response_0.json()
+    assert "prediction" in response_data
+    assert 0 == response_data["prediction"]
+    
+def test_POST_inference_1_endpoint_successful():
     # Define test input data for a 1 response
     input_data_1 = {        
             "workclass": "Self-emp-not-inc",
@@ -145,25 +157,16 @@ def test_POST_inference_endpoint_successful():
             "native_country": "United-States" #Removed ,       
     }
     
-    # Send a POST request to the "/inference" endpoint with the "0" test input data
-    response_0 = client.post("/inference/", json=input_data_0)
-    
     # Send a POST request to the "/inference" endpoint with the "1" test input data
     response_1 = client.post("/inference/", json=input_data_1)
     
     # Assert that the response status code is 200
-    assert response_0.status_code == 200
-
-    # Assert that the response contains a "prediction" key and 0 answer
-    response_data = response_0.json()
-    assert "prediction" in response_data
-    assert 0 == response_data["prediction"]
+    assert response_1.status_code == 200
     
     # Assert that the response contains a "prediction" key and 1 answer
     response_data = response_1.json()
     assert "prediction" in response_data
     assert 1 == response_data["prediction"]
-
 
 def test_POST_inference_endpoint_error_handling():
     # Define test input data with incorrect values

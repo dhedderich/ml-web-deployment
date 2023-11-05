@@ -44,6 +44,7 @@ To create and train the Random Forest model, use the following command in the ro
 python train_model.py
 
 ```
+To analyze the ML model's prediction errors there is a function called "calculate_slice_metrics" in `model.py` that computes the data slice metrics (precision, recall, fbeta) of categorical columns' unique classes of the test set.
 
 ## Testing
 Unit tests for the code are implemented using Pytest. You can run the tests within the /tests directory using the following command:
